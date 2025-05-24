@@ -2,6 +2,13 @@
 
 public class MyArray
 {
+    #region Atributes
+
+    private int _top;
+    private int[] _array;
+
+    #endregion Atributes
+
     #region Constructors
 
     public MyArray(int n)
@@ -12,13 +19,6 @@ public class MyArray
     }
 
     #endregion Constructors
-
-    #region Atributes
-
-    private int _top;
-    private int[] _array;
-
-    #endregion Atributes
 
     #region Properties
 
@@ -31,6 +31,66 @@ public class MyArray
 
     #region Methods
 
+    public void Add(int value)
+    {
+        if (IsFull)
+        {
+            throw new Exception("Array is full.");
+        }
+        _array[_top] = value;
+        _top++;
+    }
+
+    public void Insert(int value, int index)
+    {
+        if (IsFull)
+        {
+            throw new Exception("Array is full.");
+        }
+
+        if (index < 0)
+        {
+            index = 0;
+        }
+
+        if (index > _top)
+        {
+            index = _top;
+        }
+        for (int i = _top; i > index; i--)
+        {
+            _array[i] = _array[i - 1];
+        }
+        _array[index] = value;
+        _top++;
+    }
+
+    public void Remove(int index)
+    {
+        if (IsEmpty)
+        {
+            throw new Exception("Array is empty.");
+        }
+        if (index < 0)
+        {
+            index = 0;
+        }
+        if (index > _top)
+        {
+            index = _top;
+        }
+        for (int i = index; i < _top - 1; i++)
+        {
+            _array[i] = _array[i + 1];
+        }
+        _top--;
+    }
+
+    public void Fill()
+    {
+        Fill(0, 100);
+    }
+
     public void Fill(int minimun, int maximun)
     {
         Random random = new();
@@ -39,6 +99,27 @@ public class MyArray
             _array[i] = random.Next(minimun, maximun);
         }
         _top = N;
+    }
+
+    public MyArray GetOdds()
+    {
+        var countOdds = 0;
+        for (int i = 0; i < _top; i++)
+        {
+            if (_array[i] % 2 != 0)
+            {
+                countOdds++;
+            }
+        }
+        var oddsArray = new MyArray(countOdds);
+        for (int i = 0; i < _top; i++)
+        {
+            if (_array[i] % 2 == 0)
+            {
+                oddsArray.Add(_array[i]);
+            }
+        }
+        return oddsArray;
     }
 
     public override string ToString()
@@ -62,8 +143,6 @@ public class MyArray
             }
         }
         return output;
-
-        #endregion Methods
     }
 
     public void Sort()
@@ -101,4 +180,6 @@ public class MyArray
         a = b;
         b = temp;
     }
+
+    #endregion Methods
 }
